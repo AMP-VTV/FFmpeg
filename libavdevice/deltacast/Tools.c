@@ -23,7 +23,7 @@ const char* GetChnTypeName(VHD_CHANNELTYPE ChnType_E)
    switch(ChnType_E)
    {
    case VHD_CHNTYPE_DISABLE : return "Not Present";
-   case VHD_CHNTYPE_SDSDI_DEPRECATED : return "SD-SDI";
+   case VHD_CHNTYPE_SDSDI : return "SD-SDI";
    case VHD_CHNTYPE_HDSDI : return "HD-SDI";
    case VHD_CHNTYPE_3GSDI : return "3G-SDI";
    case VHD_CHNTYPE_DVI : return "DVI";
@@ -219,15 +219,15 @@ void PrintBoardInfo(int BoardIndex)
       {
       case VHD_BOARDTYPE_HD :    printf("    - HD board type"); break;
       case VHD_BOARDTYPE_HDKEY_DEPRECATED : printf("    - HD key board type"); break;
-      case VHD_BOARDTYPE_SD_DEPRECATED :    printf("    - SD board type"); break;
-      case VHD_BOARDTYPE_SDKEY_DEPRECATED : printf("    - SD key board type"); break;
+      case VHD_BOARDTYPE_SD :    printf("    - SD board type"); break;
+      case VHD_BOARDTYPE_SDKEY : printf("    - SD key board type"); break;
       case VHD_BOARDTYPE_DVI_DEPRECATED :   printf("    - DVI board type"); break;
       case VHD_BOARDTYPE_CODEC : printf("    - CODEC board type"); break;
       case VHD_BOARDTYPE_3G :    printf("    - 3G board type"); break;
 		case VHD_BOARDTYPE_3GKEY : printf("    - 3G key board type"); break;
 		case VHD_BOARDTYPE_ASI :   printf("    - ASI board type"); break;
 		case VHD_BOARDTYPE_FLEX_DEPRECATED :  printf("    - FLEX board type"); break;
-      case VHD_BOARDTYPE_HDMI_DEPRECATED:   printf("    - H4K board type"); break;
+      case VHD_BOARDTYPE_HDMI:   printf("    - H4K board type"); break;
       case VHD_BOARDTYPE_IP:     printf("    - IP board type"); break;
       default :                  printf("    - Unknown board type"); break;
       }
@@ -370,7 +370,7 @@ BOOL32 IsKeyerAvailable(HANDLE BoardHandle)
       switch (BoardType)
       {
       case VHD_BOARDTYPE_SDKEY:
-      case VHD_BOARDTYPE_HDKEY:
+      case VHD_BOARDTYPE_HDKEY_DEPRECATED:
       case VHD_BOARDTYPE_3GKEY: return TRUE;
       default: break;
       }

@@ -23,7 +23,7 @@ const char* GetChnTypeName(VHD_CHANNELTYPE ChnType_E)
    switch(ChnType_E)
    {
    case VHD_CHNTYPE_DISABLE : return "Not Present";
-   case VHD_CHNTYPE_SDSDI : return "SD-SDI";
+   case VHD_CHNTYPE_SDSDI_DEPRECATED : return "SD-SDI";
    case VHD_CHNTYPE_HDSDI : return "HD-SDI";
    case VHD_CHNTYPE_3GSDI : return "3G-SDI";
    case VHD_CHNTYPE_DVI : return "DVI";
@@ -195,7 +195,7 @@ void PrintBoardInfo(int BoardIndex)
       VHD_GetBoardProperty(BoardHandle, VHD_CORE_BP_SERIALNUMBER_MSW, &SerialMsw);
       VHD_GetBoardProperty(BoardHandle, VHD_CORE_BP_SERIALNUMBER_EX, &SerialEx);
       VHD_GetBoardProperty(BoardHandle, VHD_CORE_BP_NBOF_LANE, &NbOfLane);
-      VHD_GetBoardProperty(BoardHandle, VHD_CORE_BP_FIRMWARE2_VERSION, &Firmware2Version);
+      VHD_GetBoardProperty(BoardHandle, VHD_CORE_BP_FIRMWARE2_VERSION_DEPRECATED, &Firmware2Version);
       VHD_GetBoardProperty(BoardHandle, VHD_CORE_BP_LOWPROFILE, &LowProfile);
       VHD_GetBoardProperty(BoardHandle, VHD_CORE_BP_NB_RXCHANNELS, &NbRxChannels);
       VHD_GetBoardProperty(BoardHandle, VHD_CORE_BP_NB_TXCHANNELS, &NbTxChannels);
@@ -204,7 +204,7 @@ void PrintBoardInfo(int BoardIndex)
       printf("    - Driver v%02d.%02d.%04d\n",DriverVersion>>24,(DriverVersion>>16)&0xFF,DriverVersion&0xFFFF);
       printf("    - Board fpga firmware v%02X (%02X-%02X-%02X)\n",FirmwareVersion&0xFF,(FirmwareVersion>>24)&0xFF,(FirmwareVersion>>16)&0xFF,(FirmwareVersion>>8)&0xFF);
       printf("    - Board cpld v%08X\n",Firmware2Version);
-      if(BoardType==VHD_BOARDTYPE_DVI || BoardType==VHD_BOARDTYPE_3G || BoardType==VHD_BOARDTYPE_3GKEY || (BoardType==VHD_BOARDTYPE_HD && NbTxChannels==4))
+      if(BoardType==VHD_BOARDTYPE_DVI_DEPRECATED || BoardType==VHD_BOARDTYPE_3G || BoardType==VHD_BOARDTYPE_3GKEY || (BoardType==VHD_BOARDTYPE_HD && NbTxChannels==4))
       {
          VHD_GetBoardProperty(BoardHandle, VHD_CORE_BP_FIRMWARE3_VERSION, &Firmware3Version);
          printf("    - Board micro-controller firmware v%02X (%02X-%02X-%02X)\n",Firmware3Version&0xFF,(Firmware3Version>>24)&0xFF,(Firmware3Version>>16)&0xFF,(Firmware3Version>>8)&0xFF);
@@ -218,16 +218,16 @@ void PrintBoardInfo(int BoardIndex)
       switch(BoardType)
       {
       case VHD_BOARDTYPE_HD :    printf("    - HD board type"); break;
-      case VHD_BOARDTYPE_HDKEY : printf("    - HD key board type"); break;
-      case VHD_BOARDTYPE_SD :    printf("    - SD board type"); break;
-      case VHD_BOARDTYPE_SDKEY : printf("    - SD key board type"); break;
-      case VHD_BOARDTYPE_DVI :   printf("    - DVI board type"); break;
+      case VHD_BOARDTYPE_HDKEY_DEPRECATED : printf("    - HD key board type"); break;
+      case VHD_BOARDTYPE_SD_DEPRECATED :    printf("    - SD board type"); break;
+      case VHD_BOARDTYPE_SDKEY_DEPRECATED : printf("    - SD key board type"); break;
+      case VHD_BOARDTYPE_DVI_DEPRECATED :   printf("    - DVI board type"); break;
       case VHD_BOARDTYPE_CODEC : printf("    - CODEC board type"); break;
       case VHD_BOARDTYPE_3G :    printf("    - 3G board type"); break;
 		case VHD_BOARDTYPE_3GKEY : printf("    - 3G key board type"); break;
 		case VHD_BOARDTYPE_ASI :   printf("    - ASI board type"); break;
-		case VHD_BOARDTYPE_FLEX :  printf("    - FLEX board type"); break;
-      case VHD_BOARDTYPE_HDMI:   printf("    - H4K board type"); break;
+		case VHD_BOARDTYPE_FLEX_DEPRECATED :  printf("    - FLEX board type"); break;
+      case VHD_BOARDTYPE_HDMI_DEPRECATED:   printf("    - H4K board type"); break;
       case VHD_BOARDTYPE_IP:     printf("    - IP board type"); break;
       default :                  printf("    - Unknown board type"); break;
       }
@@ -556,7 +556,7 @@ BOOL32 SetNbChannels(ULONG BrdId, ULONG NbRx, ULONG NbTx)
             if ((NbRx+NbTx)<=NbChanOnBoard)
             {
                printf("\nChanging board configuration... ");
-
+	/*
                if (NbChanOnBoard == 2)
                {
                   switch (NbRx)
@@ -566,7 +566,9 @@ BOOL32 SetNbChannels(ULONG BrdId, ULONG NbRx, ULONG NbTx)
                   case 2 :	VHD_SetBiDirCfg(BrdId, VHD_BIDIR_20);break;
                   }
                }
-               else if (NbChanOnBoard == 4)
+               else
+	*/
+		if (NbChanOnBoard == 4)
                {
                   switch (NbRx)
                   {

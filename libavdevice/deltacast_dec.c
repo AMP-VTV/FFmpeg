@@ -94,7 +94,7 @@ static int start_video_stream(struct deltacast_ctx *ctx) {
 				Result = VHD_OpenBoardHandle(BrdId, &ctx->BoardHandle, NULL, 0);
 				if (Result == VHDERR_NOERROR) {
 					VHD_GetBoardProperty(ctx->BoardHandle, CHNTYPE, &ctx->ChnType);
-					if((ctx->ChnType == VHD_CHNTYPE_SDSDI) || (ctx->ChnType == VHD_CHNTYPE_HDSDI) || (ctx->ChnType == VHD_CHNTYPE_3GSDI)) {
+					if((ctx->ChnType == VHD_CHNTYPE_HDSDI) || (ctx->ChnType == VHD_CHNTYPE_3GSDI)) {
 						VHD_SetBoardProperty(ctx->BoardHandle, VHD_CORE_BP_BYPASS_RELAY_3, FALSE);
 						WaitForChannelLocked(ctx->BoardHandle, CHNSTATUS);    
 						Result = VHD_GetBoardProperty(ctx->BoardHandle, CLOCKDIV, &ctx->ClockSystem);
@@ -245,7 +245,7 @@ static const AVClass deltacast_demuxer_class = {
 AVInputFormat ff_deltacast_demuxer = {
     .name           = "deltacast",
     .long_name      = NULL_IF_CONFIG_SMALL("Deltacast input"),
-    .flags          = AVFMT_NOFILE | AVFMT_RAWPICTURE,
+    .flags          = AVFMT_NOFILE,
     .priv_class     = &deltacast_demuxer_class,
     .priv_data_size = sizeof(struct deltacast_ctx),
     .read_header   = deltacast_read_header,

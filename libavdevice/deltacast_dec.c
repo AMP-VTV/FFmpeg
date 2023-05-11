@@ -2,8 +2,8 @@
 #include <libavdevice/avdevice.h>
 #include "libavutil/opt.h"
 
-#include "VideoMasterHD_Core.h"
-#include "VideoMasterHD_Sdi.h"
+#include "libavdevice/deltacast/VideoMasterHD_Core.h"
+#include "libavdevice/deltacast/VideoMasterHD_Sdi.h"
 
 #include "libavdevice/deltacast/Tools.h"
 #include "libavdevice/deltacast/Tools.h"

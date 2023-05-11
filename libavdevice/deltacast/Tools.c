@@ -23,7 +23,8 @@ const char* GetChnTypeName(VHD_CHANNELTYPE ChnType_E)
    switch(ChnType_E)
    {
    case VHD_CHNTYPE_DISABLE : return "Not Present";
-   case VHD_CHNTYPE_SDSDI : return "SD-SDI";
+   case VHD_CHNTYPE_SDSDI_DEPRECATED : return "SD-SDI";
+   // case VHD_CHNTYPE_SDSDI : return "SD-SDI";
    case VHD_CHNTYPE_HDSDI : return "HD-SDI";
    case VHD_CHNTYPE_3GSDI : return "3G-SDI";
    case VHD_CHNTYPE_DVI : return "DVI";
@@ -36,53 +37,59 @@ const char * GetErrorDescription(ULONG CodeError)
 {
    switch (CodeError)
    {
-   case VHDERR_NOERROR :                              return "No error";
-   case VHDERR_FATALERROR :                           return "Fatal error occurred (should re-install)";
-   case VHDERR_OPERATIONFAILED :                      return "Operation failed (undefined error)";
-   case VHDERR_NOTENOUGHRESOURCE :                    return "Not enough resource to complete the operation";
-   case VHDERR_NOTIMPLEMENTED :                       return "Not implemented yet";
-   case VHDERR_NOTFOUND :                             return "Required element was not found";
-   case VHDERR_BADARG :                               return "Bad argument value";
-   case VHDERR_INVALIDPOINTER :                       return "Invalid pointer";
-   case VHDERR_INVALIDHANDLE :                        return "Invalid handle";
-   case VHDERR_INVALIDPROPERTY :                      return "Invalid property index";
-   case VHDERR_INVALIDSTREAM :                        return "Invalid stream or invalid stream type";
-   case VHDERR_RESOURCELOCKED :                       return "Resource is currently locked";
-   case VHDERR_BOARDNOTPRESENT :                      return "Board is not available";
-   case VHDERR_INCOHERENTBOARDSTATE :                 return "Incoherent board state or register value";
-   case VHDERR_INCOHERENTDRIVERSTATE :                return "Incoherent driver state";
-   case VHDERR_INCOHERENTLIBSTATE :                   return "Incoherent library state";
-   case VHDERR_SETUPLOCKED :                          return "Configuration is locked";
-   case VHDERR_CHANNELUSED :                          return "Requested channel is already used or doesn't exist";
-   case VHDERR_STREAMUSED :                           return "Requested stream is already used";
-   case VHDERR_READONLYPROPERTY :                     return "Property is read-only";
-   case VHDERR_OFFLINEPROPERTY :                      return "Property is off-line only";
-   case VHDERR_TXPROPERTY :                           return "Property is of TX streams";
-   case VHDERR_TIMEOUT :                              return "Time-out occurred";
-   case VHDERR_STREAMNOTRUNNING :                     return "Stream is not running";
-   case VHDERR_BADINPUTSIGNAL :                       return "Bad input signal, or unsupported standard";
-   case VHDERR_BADREFERENCESIGNAL :                   return "Bad genlock signal or unsupported standard";                                 
-   case VHDERR_FRAMELOCKED :                          return "Frame already locked";
-   case VHDERR_FRAMEUNLOCKED :                        return "Frame already unlocked";
-   case VHDERR_INCOMPATIBLESYSTEM :                   return "Selected video standard is incompatible with running clock system";
-   case VHDERR_ANCLINEISEMPTY :                       return "ANC line is empty";
-   case VHDERR_ANCLINEISFULL :                        return "ANC line is full";
-   case VHDERR_BUFFERTOOSMALL :                       return "Buffer too small";
-   case VHDERR_BADANC :                               return "Received ANC aren't standard";
-   case VHDERR_BADCONFIG :                            return "Invalid configuration";
-   case VHDERR_FIRMWAREMISMATCH :                     return "The loaded firmware is not compatible with the installed driver";
-   case VHDERR_LIBRARYMISMATCH :                      return "The loaded VideomasterHD library is not compatible with the installed driver";
-   case VHDERR_FAILSAFE :                             return "The fail safe firmware is loaded. You need to upgrade your firmware";
-   case VHDERR_RXPROPERTY :                           return "Property is of RX streams";
-   case VHDERR_LTCSOURCEUNLOCKED :                    return "LTC source unlocked";
-   case VHDERR_INVALIDACCESSRIGHT :                   return "Invalid access right";
-   case VHDERR_LICENSERESTRICTION :                   return "Not allowed by the provided license";
-   case VHDERR_SOFTWAREPROTECTION_FAILURE :           return "Error occured in the software protection module";
-   case VHDERR_SOFTWAREPROTECTION_IDNOTFOUND :        return "Host ID cannot be found";
-   case VHDERR_SOFTWAREPROTECTION_BADLICENSEINFO :    return "invalid provided License";
-   case VHDERR_SOFTWAREPROTECTION_UNAUTHORIZEDHOST :  return "Host unauthorized";
-   case VHDERR_SOFTWAREPROTECTION_STREAMSTARTED :     return "License providing requires all stream to be stopped";
-   default:                                           return "Unknown code error";
+   case VHDERR_NOERROR :                                          return "No error";
+   case VHDERR_FATALERROR :                                       return "Fatal error occurred (should re-install)";
+   case VHDERR_OPERATIONFAILED :                                  return "Operation failed (undefined error)";
+   case VHDERR_NOTENOUGHRESOURCE :                                return "Not enough resource to complete the operation";
+   case VHDERR_NOTIMPLEMENTED :                                   return "Not implemented yet";
+   case VHDERR_NOTFOUND :                                         return "Required element was not found";
+   case VHDERR_BADARG :                                           return "Bad argument value";
+   case VHDERR_INVALIDPOINTER :                                   return "Invalid pointer";
+   case VHDERR_INVALIDHANDLE :                                    return "Invalid handle";
+   case VHDERR_INVALIDPROPERTY :                                  return "Invalid property index";
+   case VHDERR_INVALIDSTREAM :                                    return "Invalid stream or invalid stream type";
+   case VHDERR_RESOURCELOCKED :                                   return "Resource is currently locked";
+   case VHDERR_BOARDNOTPRESENT :                                  return "Board is not available";
+   case VHDERR_INCOHERENTBOARDSTATE :                             return "Incoherent board state or register value";
+   case VHDERR_INCOHERENTDRIVERSTATE :                            return "Incoherent driver state";
+   case VHDERR_INCOHERENTLIBSTATE :                               return "Incoherent library state";
+   case VHDERR_SETUPLOCKED :                                      return "Configuration is locked";
+   case VHDERR_CHANNELUSED :                                      return "Requested channel is already used or doesn't exist";
+   case VHDERR_STREAMUSED :                                       return "Requested stream is already used";
+   case VHDERR_READONLYPROPERTY :                                 return "Property is read-only";
+   case VHDERR_OFFLINEPROPERTY :                                  return "Property is off-line only";
+   case VHDERR_TXPROPERTY :                                       return "Property is of TX streams";
+   case VHDERR_TIMEOUT :                                          return "Time-out occurred";
+   case VHDERR_STREAMNOTRUNNING :                                 return "Stream is not running";
+   case VHDERR_BADINPUTSIGNAL :                                   return "Bad input signal, or unsupported standard";
+   case VHDERR_BADREFERENCESIGNAL :                               return "Bad genlock signal or unsupported standard";                                 
+   case VHDERR_FRAMELOCKED :                                      return "Frame already locked";
+   case VHDERR_FRAMEUNLOCKED :                                    return "Frame already unlocked";
+   case VHDERR_INCOMPATIBLESYSTEM :                               return "Selected video standard is incompatible with running clock system";
+   case VHDERR_ANCLINEISEMPTY :                                   return "ANC line is empty";
+   case VHDERR_ANCLINEISFULL :                                    return "ANC line is full";
+   case VHDERR_BUFFERTOOSMALL :                                   return "Buffer too small";
+   case VHDERR_BADANC :                                           return "Received ANC aren't standard";
+   case VHDERR_BADCONFIG :                                        return "Invalid configuration";
+   case VHDERR_FIRMWAREMISMATCH :                                 return "The loaded firmware is not compatible with the installed driver";
+   case VHDERR_LIBRARYMISMATCH :                                  return "The loaded VideomasterHD library is not compatible with the installed driver";
+   case VHDERR_FAILSAFE :                                         return "The fail safe firmware is loaded. You need to upgrade your firmware";
+   case VHDERR_RXPROPERTY :                                       return "Property is of RX streams";
+   case VHDERR_LTCSOURCEUNLOCKED :                                return "LTC source unlocked";
+   case VHDERR_INVALIDACCESSRIGHT :                               return "Invalid access right";
+   case VHDERR_LICENSERESTRICTION_DEPRECATED :                    return "Not allowed by the provided license";
+   // case VHDERR_LICENSERESTRICTION :                   return "Not allowed by the provided license";
+   case VHDERR_SOFTWAREPROTECTION_FAILURE_DEPRECATED:             return "Error occured in the software protection module";
+   // case VHDERR_SOFTWAREPROTECTION_FAILURE :           return "Error occured in the software protection module";
+   case VHDERR_SOFTWAREPROTECTION_IDNOTFOUND_DEPRECATED :         return "Host ID cannot be found";
+   // case VHDERR_SOFTWAREPROTECTION_IDNOTFOUND :        return "Host ID cannot be found";
+   case VHDERR_SOFTWAREPROTECTION_BADLICENSEINFO_DEPRECATED :     return "invalid provided License";
+   // case VHDERR_SOFTWAREPROTECTION_BADLICENSEINFO :    return "invalid provided License";
+   case VHDERR_SOFTWAREPROTECTION_UNAUTHORIZEDHOST_DEPRECATED :   return "Host unauthorized";
+   // case VHDERR_SOFTWAREPROTECTION_UNAUTHORIZEDHOST :  return "Host unauthorized";
+   case VHDERR_SOFTWAREPROTECTION_STREAMSTARTED_DEPRECATED :      return "License providing requires all stream to be stopped";
+   // case VHDERR_SOFTWAREPROTECTION_STREAMSTARTED :     return "License providing requires all stream to be stopped";
+   default:                                                       return "Unknown code error";
    }
 }
 
@@ -217,19 +224,26 @@ void PrintBoardInfo(int BoardIndex)
       printf("    - Board serial# : 0x%08X%08X%08X\n",SerialEx,SerialMsw,SerialLsw);
       switch(BoardType)
       {
-      case VHD_BOARDTYPE_HD :    printf("    - HD board type"); break;
-      case VHD_BOARDTYPE_HDKEY_DEPRECATED : printf("    - HD key board type"); break;
-      case VHD_BOARDTYPE_SD :    printf("    - SD board type"); break;
-      case VHD_BOARDTYPE_SDKEY : printf("    - SD key board type"); break;
-      case VHD_BOARDTYPE_DVI_DEPRECATED :   printf("    - DVI board type"); break;
-      case VHD_BOARDTYPE_CODEC : printf("    - CODEC board type"); break;
-      case VHD_BOARDTYPE_3G :    printf("    - 3G board type"); break;
-		case VHD_BOARDTYPE_3GKEY : printf("    - 3G key board type"); break;
-		case VHD_BOARDTYPE_ASI :   printf("    - ASI board type"); break;
-		case VHD_BOARDTYPE_FLEX_DEPRECATED :  printf("    - FLEX board type"); break;
-      case VHD_BOARDTYPE_HDMI:   printf("    - H4K board type"); break;
-      case VHD_BOARDTYPE_IP:     printf("    - IP board type"); break;
-      default :                  printf("    - Unknown board type"); break;
+      case VHD_BOARDTYPE_HD :                printf("    - HD board type"); break;
+      case VHD_BOARDTYPE_HDKEY_DEPRECATED :  printf("    - HD key board type"); break;
+      // case VHD_BOARDTYPE_HDKEY :          printf("    - HD key board type"); break;
+      case VHD_BOARDTYPE_SD_DEPRECATED :     printf("    - SD board type"); break;
+      // case VHD_BOARDTYPE_SD :             printf("    - SD board type"); break;
+      case VHD_BOARDTYPE_SDKEY_DEPRECATED :  printf("    - SD key board type"); break;
+      // case VHD_BOARDTYPE_SDKEY :          printf("    - SD key board type"); break;
+      case VHD_BOARDTYPE_DVI_DEPRECATED :    printf("    - DVI board type"); break;
+      // case VHD_BOARDTYPE_DVI :            printf("    - DVI board type"); break;
+      case VHD_BOARDTYPE_CODEC :             printf("    - CODEC board type"); break;
+      case VHD_BOARDTYPE_3G :                printf("    - 3G board type"); break;
+		case VHD_BOARDTYPE_3GKEY :             printf("    - 3G key board type"); break;
+		case VHD_BOARDTYPE_ASI :               printf("    - ASI board type"); break;
+		case VHD_BOARDTYPE_FLEX_DEPRECATED :   printf("    - FLEX board type"); break;
+		// case VHD_BOARDTYPE_FLEX :           printf("    - FLEX board type"); break;
+      case VHD_BOARDTYPE_HDMI_DEPRECATED:    printf("    - H4K board type"); break;
+      // case VHD_BOARDTYPE_HDMI:            printf("    - H4K board type"); break;
+      case VHD_BOARDTYPE_HDMI20:             printf("    - H4K2 board type"); break;
+      case VHD_BOARDTYPE_IP:                 printf("    - IP board type"); break;
+      default :                              printf("    - Unknown board type"); break;
       }
       printf(" on %s bus",NbOfLane?"PCIe":"PCI");
       if(NbOfLane)
@@ -369,7 +383,7 @@ BOOL32 IsKeyerAvailable(HANDLE BoardHandle)
    {
       switch (BoardType)
       {
-      case VHD_BOARDTYPE_SDKEY:
+      case VHD_BOARDTYPE_SDKEY_DEPRECATED:
       case VHD_BOARDTYPE_HDKEY_DEPRECATED:
       case VHD_BOARDTYPE_3GKEY: return TRUE;
       default: break;

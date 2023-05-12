@@ -24,6 +24,8 @@ struct deltacast_ctx {
     int capture_started;
     ULONG frameCount;
     ULONG dropped;
+
+	// TODO : implements audio stream
  //   AVStream *audio_st;
 
 
@@ -86,7 +88,7 @@ static int start_video_stream(struct deltacast_ctx *ctx) {
 
 	NbRxRequired = 1;
 	NbTxRequired = 0;
-	//TODO: For Error conditions in the else part we should log errors
+
 	Result = VHD_GetApiInfo(&DllVersion,&NbBoards);
 	if (Result == VHDERR_NOERROR) {
 		if (NbBoards > 0) {
@@ -113,37 +115,37 @@ static int start_video_stream(struct deltacast_ctx *ctx) {
 											if (Result == VHDERR_NOERROR) {
 												status = 0; 
 											} else {
-												//log error
+												av_log(avctx, AV_LOG_ERROR, "Could not start Deltacast video stream. Result = 0x%08X (%s)\n",Result, GetErrorDescription(result));
 											}                                                         
 										} else {
-											//log error
+											av_log(avctx, AV_LOG_ERROR, "Could not get Deltacast video interface stream property. Result = 0x%08X (%s)\n",Result, GetErrorDescription(result));
 										}
 									} else {
-										//log error
+										av_log(avctx, AV_LOG_ERROR, "Could not get Deltacast video characteristics. Result = 0x%08X (%s)\n",Result, GetErrorDescription(result));
 									}
 								} else {
-								
+									av_log(avctx, AV_LOG_ERROR, "Could not get Deltacast video standard stream property. Result = 0x%08X (%s)\n",Result, GetErrorDescription(result));
 								}
 							} else {
-								//log error
+								av_log(avctx, AV_LOG_ERROR, "Could not open Deltacast stream handle. Result = 0x%08X (%s)\n",Result, GetErrorDescription(result));
 							}
 						} else {
-							//log error
+							av_log(avctx, AV_LOG_ERROR, "Could not get Deltacast clock board property. Result = 0x%08X (%s)\n",Result, GetErrorDescription(result));
 						}
 					} else {
-						//log error
+						av_log(avctx, AV_LOG_ERROR, "Could not get Deltacast chntype board property. Result = 0x%08X (%s)\n",Result, GetErrorDescription(result));
 					}
 				} else {
-					//log error
+					av_log(avctx, AV_LOG_ERROR, "Could not get Deltacast board handle. Result = 0x%08X (%s)\n",Result, GetErrorDescription(result));
 				}
 			} else {
-				//log error
+				av_log(avctx, AV_LOG_ERROR, "Could not set Deltacast channels. Result = 0x%08X (%s)\n",Result, GetErrorDescription(result));
 			}
 		} else {
-			//log error
+			av_log(avctx, AV_LOG_ERROR, "No Deltacast board found. Result = 0x%08X (%s)\n",Result, GetErrorDescription(result));
 		}
 	} else {
-		//log error
+		av_log(avctx, AV_LOG_ERROR, "Could not get Deltacast API info. Result = 0x%08X (%s)\n",Result, GetErrorDescription(result));
 	}
 	return status;
 }  
@@ -208,17 +210,19 @@ static int deltacast_read_packet(AVFormatContext *avctx, AVPacket *pkt) {
    		if (result == VHDERR_NOERROR) {
 			err = av_packet_from_data(pkt, pBuffer, bufferSize);
 			if (err) {
-				//log error
+				av_log(avctx, AV_LOG_ERROR, "\nav_packet_from_data result: 0x%08X", err);
 			} else {
 				//set flags in the packet
 			}	
 		} else {
-			//printf("\nERROR : Cannot get slot buffer. Result = 0x%08X (%s)\n",Result, GetErrorDescription(Result));
+			//av_log(avctx, AV_LOG_ERROR, "\nERROR : Cannot get slot buffer. Result = 0x%08X (%s)\n",Result, GetErrorDescription(Result));
+			printf("\nERROR : Cannot get slot buffer. Result = 0x%08X (%s)\n",Result, GetErrorDescription(result));
 	   	}
 		VHD_UnlockSlotHandle(ctx->SlotHandle); // AB
 	} else if (result != VHDERR_TIMEOUT) {
    		//cannot lock the stream
    		//log the error  
+		av_log(avctx, AV_LOG_ERROR, "\nCannot lock the stream. Result = 0x%08X (%s)\n",Result, GetErrorDescription(result));
 	} else {
    		result = VHDERR_TIMEOUT;
 	}
